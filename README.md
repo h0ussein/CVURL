@@ -6,6 +6,7 @@ A clean, modern website to display your CV/Resume online with an admin panel for
 
 - ✅ Beautiful, professional resume display
 - ✅ Password-protected admin panel to edit your resume
+- ✅ **8 Color themes** - Choose from professional color palettes
 - ✅ Print/Download as PDF functionality
 - ✅ Share button with URL copying
 - ✅ Fully responsive (mobile, tablet, desktop)
@@ -107,6 +108,7 @@ See [DEPLOY.md](DEPLOY.md) for complete deployment instructions including:
 
 ### Admin Panel (`/hussein`)
 - Password protection (passcode: `301103`)
+- **Color Theme Selector** - 8 beautiful themes to choose from
 - Edit all resume sections:
   - Personal information
   - Career objective
@@ -120,11 +122,21 @@ See [DEPLOY.md](DEPLOY.md) for complete deployment instructions including:
 
 ## 🎨 Customization
 
-### Change Colors
+### Change Colors (Easy Way)
 
-Edit `frontend/src/components/Resume.jsx` and replace:
-- `bg-blue-600` and `bg-blue-800` with your preferred colors
-- Example: `bg-green-600`, `bg-purple-600`, `bg-indigo-600`
+1. Visit `/hussein` admin panel
+2. Select from 8 pre-designed color themes:
+   - Professional Blue (default)
+   - Modern Emerald
+   - Creative Purple
+   - Tech Indigo
+   - Elegant Rose
+   - Fresh Teal
+   - Bold Orange
+   - Corporate Slate
+3. Click to apply instantly!
+
+See [COLOR_THEMES.md](COLOR_THEMES.md) for details about each theme.
 
 ### Change Passcode
 

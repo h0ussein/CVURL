@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { resumeData as defaultData } from '../data/resumeData';
+import { colorThemes, getTheme } from '../data/colorThemes';
 
 const PASSCODE = '301103';
 
@@ -10,12 +11,19 @@ const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [resumeData, setResumeData] = useState(defaultData);
+  const [selectedTheme, setSelectedTheme] = useState('blue');
 
   useEffect(() => {
     // Load resume data from localStorage if it exists
     const savedData = localStorage.getItem('resumeData');
     if (savedData) {
       setResumeData(JSON.parse(savedData));
+    }
+    
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('resumeTheme');
+    if (savedTheme) {
+      setSelectedTheme(savedTheme);
     }
   }, []);
 
@@ -32,7 +40,14 @@ const AdminPage = () => {
 
   const handleSave = () => {
     localStorage.setItem('resumeData', JSON.stringify(resumeData));
+    localStorage.setItem('resumeTheme', selectedTheme);
     toast.success('Resume updated successfully!');
+  };
+
+  const handleThemeChange = (themeId) => {
+    setSelectedTheme(themeId);
+    localStorage.setItem('resumeTheme', themeId);
+    toast.success(`Theme changed to ${getTheme(themeId).name}!`);
   };
 
   const handleViewResume = () => {
@@ -112,7 +127,7 @@ const AdminPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className={`w-16 h-16 ${getTheme(selectedTheme).primary} rounded-full flex items-center justify-center mx-auto mb-4`}>
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
@@ -137,7 +152,7 @@ const AdminPage = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+              className={`w-full ${getTheme(selectedTheme).primary} text-white py-3 rounded-lg ${getTheme(selectedTheme).hover} transition font-medium`}
             >
               Unlock
             </button>
@@ -146,7 +161,7 @@ const AdminPage = () => {
           <div className="mt-6 text-center">
             <button
               onClick={() => navigate('/')}
-              className="text-blue-600 hover:text-blue-700 text-sm"
+              className={`${getTheme(selectedTheme).text} hover:opacity-80 text-sm transition`}
             >
               ← Back to Resume
             </button>
@@ -175,11 +190,45 @@ const AdminPage = () => {
               </button>
               <button
                 onClick={handleSave}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                className={`px-6 py-2 ${getTheme(selectedTheme).primary} text-white rounded-lg ${getTheme(selectedTheme).hover} transition font-medium`}
               >
                 Save Changes
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Color Theme Selector */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">🎨 Color Theme</h2>
+          <p className="text-gray-600 mb-4">Choose a color theme for your resume</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {colorThemes.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => handleThemeChange(theme.id)}
+                className={`relative p-4 rounded-lg border-2 transition-all ${
+                  selectedTheme === theme.id
+                    ? 'border-gray-900 shadow-lg scale-105'
+                    : 'border-gray-200 hover:border-gray-400'
+                }`}
+              >
+                <div className={`w-full h-20 rounded-md bg-gradient-to-r ${theme.gradient} mb-3`}></div>
+                <p className="text-sm font-medium text-gray-900 text-center">{theme.name}</p>
+                {selectedTheme === theme.id && (
+                  <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+            <p className="text-sm text-blue-800">
+              💡 <strong>Tip:</strong> Your color theme will be applied to your resume header, section borders, and buttons. Changes are saved automatically when you click "Save Changes" below.
+            </p>
           </div>
         </div>
 
@@ -429,7 +478,7 @@ const AdminPage = () => {
         <div className="flex justify-center">
           <button
             onClick={handleSave}
-            className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-lg"
+            className={`px-8 py-3 ${getTheme(selectedTheme).primary} text-white rounded-lg ${getTheme(selectedTheme).hover} transition font-medium text-lg`}
           >
             💾 Save All Changes
           </button>

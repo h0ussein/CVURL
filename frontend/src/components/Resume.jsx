@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import { resumeData as defaultData } from '../data/resumeData';
+import { getTheme } from '../data/colorThemes';
 import toast from 'react-hot-toast';
 
 const Resume = () => {
   const [resumeData, setResumeData] = useState(defaultData);
+  const [theme, setTheme] = useState(getTheme('blue'));
 
   useEffect(() => {
     // Load resume data from localStorage if it exists
     const savedData = localStorage.getItem('resumeData');
     if (savedData) {
       setResumeData(JSON.parse(savedData));
+    }
+    
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('resumeTheme');
+    if (savedTheme) {
+      setTheme(getTheme(savedTheme));
     }
   }, []);
   const handlePrint = () => {
@@ -54,7 +62,7 @@ const Resume = () => {
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className={`flex items-center gap-2 px-4 py-2 ${theme.primary} text-white rounded-lg ${theme.hover} transition`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -67,7 +75,7 @@ const Resume = () => {
       {/* Resume Content */}
       <div className="max-w-4xl mx-auto bg-white shadow-lg print:shadow-none">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-12 py-10 print:py-6">
+        <div className={`bg-gradient-to-r ${theme.gradient} text-white px-12 py-10 print:py-6`}>
           <h1 className="text-4xl font-bold mb-2 print:text-3xl">
             {resumeData.personalInfo.fullName}
           </h1>
@@ -103,7 +111,7 @@ const Resume = () => {
         <div className="px-12 py-8 print:px-8">
           {/* Career Objective */}
           <section className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+            <h2 className={`text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 ${theme.border}`}>
               CAREER OBJECTIVE
             </h2>
             <p className="text-gray-700 leading-relaxed">
@@ -113,7 +121,7 @@ const Resume = () => {
 
           {/* Technical Skills */}
           <section className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+            <h2 className={`text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 ${theme.border}`}>
               TECHNICAL SKILLS
             </h2>
             <div className="space-y-2">
@@ -132,7 +140,7 @@ const Resume = () => {
 
           {/* Projects */}
           <section className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+            <h2 className={`text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 ${theme.border}`}>
               PROJECTS
             </h2>
             <ul className="space-y-3">
@@ -146,7 +154,7 @@ const Resume = () => {
 
           {/* Software Experience */}
           <section className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+            <h2 className={`text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 ${theme.border}`}>
               SOFTWARE EXPERIENCE
             </h2>
             <p className="text-gray-700">
@@ -156,7 +164,7 @@ const Resume = () => {
 
           {/* Education */}
           <section className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+            <h2 className={`text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 ${theme.border}`}>
               EDUCATION
             </h2>
             <div>
@@ -171,7 +179,7 @@ const Resume = () => {
 
           {/* Languages */}
           <section className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+            <h2 className={`text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 ${theme.border}`}>
               LANGUAGES
             </h2>
             <p className="text-gray-700">
