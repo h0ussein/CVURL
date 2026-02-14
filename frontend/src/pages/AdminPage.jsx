@@ -82,6 +82,15 @@ const AdminPage = () => {
     });
   };
 
+  const moveSkillCategory = (index, direction) => {
+    const newSkills = [...resumeData.technicalSkills];
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= newSkills.length) return;
+    [newSkills[index], newSkills[target]] = [newSkills[target], newSkills[index]];
+    setResumeData({ ...resumeData, technicalSkills: newSkills });
+    toast.success(`Category moved ${direction === 'up' ? 'up' : 'down'}`);
+  };
+
   const updateProject = (index, field, value) => {
     const newProjects = [...resumeData.projects];
     if (field === 'title') newProjects[index].title = value;
@@ -295,16 +304,23 @@ const AdminPage = () => {
             {sectionTitle('skills', 'Technical Skills', '🛠️')}
             {openSection === 'skills' && (
               <div className="px-4 pb-4 border-t border-gray-100 space-y-4 pt-4">
-                <p className="text-sm text-gray-600">Each category on its own; skills one per line (or comma-separated).</p>
+                <p className="text-sm text-gray-600">Each category on its own; skills one per line. Use ↑↓ to reorder categories.</p>
                 {resumeData.technicalSkills.map((skill, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-3">
-                    <input
-                      type="text"
-                      value={skill.category}
-                      onChange={(e) => updateSkillCategory(index, 'category', e.target.value)}
-                      placeholder="Category (e.g. Programming)"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg mb-2 text-base"
-                    />
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-gray-500 font-medium">#{index + 1}</span>
+                      <input
+                        type="text"
+                        value={skill.category}
+                        onChange={(e) => updateSkillCategory(index, 'category', e.target.value)}
+                        placeholder="Category (e.g. Programming)"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-base"
+                      />
+                      <div className="flex flex-col gap-0.5">
+                        <button type="button" onClick={() => moveSkillCategory(index, 'up')} disabled={index === 0} className="p-1.5 rounded bg-gray-100 disabled:opacity-40" aria-label="Move up">↑</button>
+                        <button type="button" onClick={() => moveSkillCategory(index, 'down')} disabled={index === resumeData.technicalSkills.length - 1} className="p-1.5 rounded bg-gray-100 disabled:opacity-40" aria-label="Move down">↓</button>
+                      </div>
+                    </div>
                     <textarea
                       value={(skill.skills || []).join('\n')}
                       onChange={(e) => updateSkillCategory(index, 'skills', e.target.value)}
