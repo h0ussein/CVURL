@@ -126,7 +126,7 @@ const Resume = () => {
                   <span className="text-gray-500 select-none flex-shrink-0">–</span>
                   <span>
                     <span className="font-semibold text-gray-900">{skillGroup.category}:</span>{' '}
-                    {Array.isArray(skillGroup.skills) ? skillGroup.skills.join(', ') : skillGroup.skills}
+                    {Array.isArray(skillGroup.skills) ? skillGroup.skills.filter(Boolean).join(', ') : skillGroup.skills}
                   </span>
                 </li>
               ))}

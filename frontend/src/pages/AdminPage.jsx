@@ -60,7 +60,8 @@ const AdminPage = () => {
   const updateSkillCategory = (index, field, value) => {
     const newSkills = [...resumeData.technicalSkills];
     if (field === 'skills') {
-      newSkills[index].skills = value.split('\n').map((s) => s.trim()).filter(Boolean);
+      // Keep empty lines so user can add new skills on new lines (don't filter(Boolean))
+      newSkills[index].skills = value.split('\n').map((s) => s.trim());
     } else {
       newSkills[index][field] = value;
     }
